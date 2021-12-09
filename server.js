@@ -1,5 +1,6 @@
 const express = require("express");
 const server = express()
+var mongoose = require('mongoose');
 
 //set up our express application
 server.use(express.json());        // to parse json data  
@@ -16,6 +17,16 @@ const passport = require('passport');
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const flash = require('connect-flash');
+
+const configDB = require('./config/database.js');
+let db;
+
+// configuration ===============================================================
+mongoose.connect(configDB.url, (err, database) => {
+    if (err) return console.log(err)
+    db = database
+    require('./app/models/routes.js')(server, passport, db);
+  }); // connect to our database
 
 // pass passport for configuration
 require('./config/passport')(passport);
