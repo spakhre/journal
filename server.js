@@ -2,7 +2,6 @@ const express = require("express");
 const server = express()
 var mongoose = require('mongoose');
 
-//set up our express application
 server.use(express.json());        // to parse json data  
 server.use(express.urlencoded({ extended: true })) // use express.urlencoded to parse incoming requests with payloads
 server.use(express.static("public"));//to access our public folder
