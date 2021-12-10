@@ -8,16 +8,15 @@ module.exports = function (server, passport, db) {
     res.render('index.ejs')
   })
 
-  server.get('/entry', (req, res) => {
-
+  server.get('/entry', isLoggedIn, (req,res) => {
+    // db.collection('entries').find({email: req.user.local.email}).toArray()
     res.render('entry.ejs')
   })
 
-  server.get('/allEntries', async (req, res) => {
+  server.get('/allEntries', isLoggedIn, async (req,res) => {
 
-    let entries = await db.collection('entries').find({ userId: ObjectId(req.user._id) }).toArray();
-    console.log(entries)
-    res.render('all-entries.ejs', { entries: entries })
+    let entries = await db.collection('entries').find({userId : ObjectId(req.user._id)}).toArray();
+    res.render('all-entries.ejs', {entries: entries})
 
   })
 
@@ -66,17 +65,15 @@ module.exports = function (server, passport, db) {
     return res.json(updatedEntry)
 
   })
-  server.delete('/allEntries/:id', async (req, res) => {
-    const id = req.params.id;
-    console.log(id);
-    await db.collection('entries').findOneAndDelete({ userId: ObjectId(id) })
-    /*
-    , (err, result) => {
+
+  server.delete('/allEntries', (req,res) => {
+    const id = req.body.entryId;
+    console.log(typeof id);
+    db.collection('entries').findOneAndDelete({_id : ObjectId(id)}, (err, result) => {
       if (err) return res.send(500, err)
+      console.log(result)
       res.send('Message deleted!')
     })
-    */
-    res.redirect('/allEntries')
   })
 
   // =============================================================================
@@ -111,4 +108,13 @@ module.exports = function (server, passport, db) {
 
   }))
 
+}
+
+
+// route middleware to ensure user is logged in
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated())
+      return next();
+
+  res.redirect('/');
 }
