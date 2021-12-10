@@ -1,4 +1,22 @@
+const journal = require('./journal')
+
 module.exports = function (server, passport, db) {
+  server.get('/entry', (req,res) => {
+    // db.collection('entries').find({email: req.user.local.email}).toArray()
+    res.render('entry.ejs')
+  })
+
+  server.post('/entry', (req,res) => {
+    // var journals = new journal({title: 'day1', note: 'happy'})
+    // res.send(journals)
+    const entry = {
+      title: req.body.title,
+      note: req.body.paragraph,
+      tag: req.body.tag
+    }
+    db.collection('entries').insertOne(entry)
+    res.redirect('/entry')
+  })
 
  // =============================================================================
   // AUTHENTICATE (FIRST LOGIN) ==================================================
@@ -13,7 +31,7 @@ module.exports = function (server, passport, db) {
 
   // process the login form
   server.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/profile', // redirect to the secure profile section
+    successRedirect: '/entry', // redirect to the secure profile section
     failureRedirect: '/login', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
   }));
@@ -26,12 +44,10 @@ module.exports = function (server, passport, db) {
 
   // process the signup form
   server.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/profile', // redirect to the secure profile section
+    successRedirect: '/entry', // redirect to the secure profile section
     failureRedirect: '/signup', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
 
   }))
-
-
 
 }
