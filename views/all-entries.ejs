@@ -10,35 +10,39 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css" />
     <title>All Entries</title>
   </head>
   <body>
-      <div>
-          <h1>Your Entries</h1>
-      </div>
+    <div>
+      <h1>Your Entries</h1>
+    </div>
     <div class="card-container d-flex flex-wrap justify-content-center">
       <% for(let entry of entries) { %>
       <div class="card" style="width: 18rem">
         <img src="..." class="card-img-top" alt="..." />
         <div class="card-body">
+          <h2 class="entry-date"><%= entry.month %> <%= entry.day %> <%= entry.year %></h2>
           <h5 class="card-title"><%= entry.title %></h5>
-          <p class="card-text"><%= entry.note %></p>
-          <p class="card-text"><%= entry.tag %></p>
-          <button
-            class="btn btn-warning editButton"
-            entry-id="<%= entry._id %>"
-            user-id="<%= entry.userId %>"
-          >
-            Edit
-          </button>
-          <button
-            class="btn btn-danger deleteButton"
-            entry-id="<%= entry._id %>"
-            user-id="<%= entry.userId %>"
-          >
-            Delete
-          </button>
+          <p class="card-text note"><%= entry.note %></p>
+          <p class="card-text tag"><%= entry.tag %></p>
+          <div>
+            <button
+              class="btn btn-warning editButton"
+              entry-id="<%= entry._id %>"
+              user-id="<%= entry.userId %>"
+              id="<%= entry._id %>"
+            >
+              Edit
+            </button>
+            <button
+              class="btn btn-danger deleteButton"
+              entry-id="<%= entry._id %>"
+              user-id="<%= entry.userId %>"
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </div>
       <% } %>
