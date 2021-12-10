@@ -1,4 +1,5 @@
 const journal = require('./journal')
+const { MongoClient, ObjectId } = require("mongodb")
 
 module.exports = function (server, passport, db) {
   server.get('/entry', (req,res) => {
@@ -6,16 +7,24 @@ module.exports = function (server, passport, db) {
     res.render('entry.ejs')
   })
 
+  server.get('/allEntries', async (req,res) => {
+
+    let entries = await db.collection('entries').find({userId : ObjectId(req.user._id)}).toArray();
+
+    res.json(entries)
+
+  })
+
   server.post('/entry', (req,res) => {
-    // var journals = new journal({title: 'day1', note: 'happy'})
-    // res.send(journals)
+
     const entry = {
+      userId: req.user._id,
       title: req.body.title,
       note: req.body.paragraph,
       tag: req.body.tag
     }
     db.collection('entries').insertOne(entry)
-    res.redirect('/entry')
+    res.redirect('/allEntries')
   })
 
  // =============================================================================
