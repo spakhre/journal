@@ -1,9 +1,13 @@
 const express = require("express");
 const server = express()
 var mongoose = require('mongoose');
+const ejsMate = require('ejs-mate'); //for layout boilerplate
+
 
 server.use(express.json());        // to parse json data  
 server.use(express.urlencoded({ extended: true })) // use express.urlencoded to parse incoming requests with payloads
+
+server.engine('ejs', ejsMate) //use ejs server.engine
 server.set("view engine", "ejs")    // allows us to use the ejs files in the view folder
 server.use(express.static("public"));//to access our public folder
 
