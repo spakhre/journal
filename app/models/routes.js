@@ -1,7 +1,13 @@
 const journal = require('./journal')
-const { MongoClient, ObjectId } = require("mongodb")
+const months = ['','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const { ObjectId } = require("mongodb")
 
 module.exports = function (server, passport, db) {
+
+  server.get('/', (req,res) => {
+    res.render('index.ejs')
+  })
+
   server.get('/entry', (req,res) => {
     // db.collection('entries').find({email: req.user.local.email}).toArray()
     res.render('entry.ejs')
@@ -17,13 +23,32 @@ module.exports = function (server, passport, db) {
 
   server.post('/entry', (req,res) => {
 
+    const date = new Date()
+    // const month = months[date.getMonth() + 1]
     const entry = {
       userId: req.user._id,
+      dateCreated: date,
+      day: date.getDate(),
+      month: date.getMonth() + 1,
+      year: date.getFullYear(),
       title: req.body.title,
       note: req.body.paragraph,
       tag: req.body.tag
     }
     db.collection('entries').insertOne(entry)
+    res.redirect('/allEntries')
+  })
+
+  server.delete('/allEntries/:id', async (req,res) => {
+    const id = req.params.id;
+    console.log(id);
+    await db.collection('entries').findOneAndDelete({userId : ObjectId(id)})
+    /*
+    , (err, result) => {
+      if (err) return res.send(500, err)
+      res.send('Message deleted!')
+    })
+    */
     res.redirect('/allEntries')
   })
 
