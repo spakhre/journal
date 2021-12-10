@@ -10,8 +10,8 @@ module.exports = function (server, passport, db) {
   server.get('/allEntries', async (req,res) => {
 
     let entries = await db.collection('entries').find({userId : ObjectId(req.user._id)}).toArray();
-
-    res.json(entries)
+    console.log(entries)
+    res.render('all-entries.ejs', {entries: entries})
 
   })
 
