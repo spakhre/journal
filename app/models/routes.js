@@ -1,10 +1,10 @@
 const journal = require('./journal')
-const months = ['','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const { ObjectId } = require("mongodb")
 
 module.exports = function (server, passport, db) {
 
-  server.get('/', (req,res) => {
+  server.get('/', (req, res) => {
     res.render('index.ejs')
   })
 
@@ -20,7 +20,7 @@ module.exports = function (server, passport, db) {
 
   })
 
-  server.post('/entry', (req,res) => {
+  server.post('/entry', (req, res) => {
 
     const date = new Date()
     // const month = months[date.getMonth() + 1]
@@ -38,6 +38,34 @@ module.exports = function (server, passport, db) {
     res.redirect('/allEntries')
   })
 
+  server.put('/allEntries', async (req, res) => {
+
+    const { entryId } = req.body
+    
+    let title = "hehe"
+    let note = "hi"
+    let tag = "there"
+
+    const editedEntry = {
+      title,
+      note,
+      tag
+    }
+
+    const updatedEntry = await db.collection('entries').findOneAndUpdate(
+      { _id: ObjectId(entryId) },
+      { $set: editedEntry }
+    )
+      .then(result => {
+        res.json('Success')
+      })
+      .catch(error => console.error(error))
+
+
+    return res.json(updatedEntry)
+
+  })
+
   server.delete('/allEntries', (req,res) => {
     const id = req.body.entryId;
     console.log(typeof id);
@@ -48,7 +76,7 @@ module.exports = function (server, passport, db) {
     })
   })
 
- // =============================================================================
+  // =============================================================================
   // AUTHENTICATE (FIRST LOGIN) ==================================================
   // =============================================================================
 
@@ -65,8 +93,8 @@ module.exports = function (server, passport, db) {
     failureRedirect: '/login', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
   }));
-  
-    // SIGNUP =================================
+
+  // SIGNUP =================================
   // show the signup form
   server.get('/signup', function (req, res) {
     res.render('signup.ejs', { message: req.flash('signupMessage') });
