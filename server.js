@@ -2,7 +2,13 @@ const express = require("express");
 const server = express()
 var mongoose = require('mongoose');
 const ejsMate = require('ejs-mate'); //for layout boilerplate
-
+const multer = require('multer')
+// S3 packages
+const aws = require('aws-sdk')
+const multerS3 = require('multer-s3')
+const configAWS = require('./config/aws.js')
+const s3 = new aws.S3(configAWS)
+require('dotenv').config({path: "./config/.env"})
 
 server.use(express.json());        // to parse json data  
 server.use(express.urlencoded({ extended: true })) // use express.urlencoded to parse incoming requests with payloads
@@ -28,7 +34,7 @@ let db;
 mongoose.connect(configDB.url, (err, database) => {
     if (err) return console.log(err)
     db = database
-    require('./app/models/routes.js')(server, passport, db);
+    require('./app/models/routes.js')(server, passport, db, multer, multerS3, s3, aws);
   }); // connect to our database
 
 // pass passport for configuration
