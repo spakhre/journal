@@ -1,3 +1,8 @@
+
+<% layout('/layout/boilerplate') %>
+
+      <h1 class = "text-center mb-3">Your Entries</h1>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -14,10 +19,25 @@
     <title>All Entries</title>
   </head>
   <body>
+    <% const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] %>
+    <% let year = new Date().getFullYear() %>
     <div>
       <h1>Your Entries</h1>
-    </div>
-    <% const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] %>
+      <div>
+      <select class="select-month">
+        <% for (let i = 1; i < months.length; i++) { %>
+          <option value= <%= i %> ><%= months[i]%></option>
+        <% } %>
+      </select>
+      <select class="select-year">
+        <% for (let i = 2020; i < year + 1; i++) { %>
+          <option value= <%= i %> ><%= i%></option>
+        <% } %>
+      </select>
+      <button class="filter-button">Filter</button>
+      </div>
+
+
     <div class="card-container d-flex flex-wrap justify-content-center">
       <% for(let entry of entries) { %>
       <div class="card" style="width: 18rem">
@@ -32,10 +52,12 @@
               class="btn btn-warning editButton"
               entry-id="<%= entry._id %>"
               user-id="<%= entry.userId %>"
-              id="<%= entry._id %>"
-            >
-              Edit
+              id="<%= entry._id %> "
+              >
+              <a href="/allEntries/<%= entry._id %>">Edit</a>
+                            
             </button>
+
             <button
               class="btn btn-danger deleteButton"
               entry-id="<%= entry._id %>"
@@ -49,5 +71,4 @@
       <% } %>
     </div>
     <script src="main.js"></script>
-  </body>
-</html>
+

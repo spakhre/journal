@@ -22,6 +22,15 @@ module.exports = function (server, passport, db, multer, multerS3, s3, aws) {
 
   })
 
+  server.post('/filteredEntries', isLoggedIn, async (req,res) => {
+    console.log(req.body)
+    let entries = await db.collection('entries').find({month: Number(req.body.month), year: Number(req.body.year)}).toArray();
+
+    console.log(entries)
+    res.render('all-entries.ejs', {entries: entries})
+
+  })
+
   //Multer s3 handling image upload
   aws.config.region = 'us-east-2';
   var uploadS3 = multer({
@@ -62,40 +71,42 @@ server.post('/entry', uploadS3.single('image'), async (req, res) => {
     res.redirect('/allEntries')
   })
 
-  server.put('/allEntries', async (req, res) => {
+  server.post('/allEntries', (req, res) => {
 
-    const { entryId } = req.body
+    const { entryId, title, note, tag } = req.body
     
-    let title = "hehe"
-    let note = "hi"
-    let tag = "there"
-
     const editedEntry = {
       title,
       note,
       tag
     }
 
-    const updatedEntry = await db.collection('entries').findOneAndUpdate(
+
+  db.collection('entries').findOneAndUpdate(
       { _id: ObjectId(entryId) },
       { $set: editedEntry }
     )
       .then(result => {
-        res.json('Success')
+        res.redirect('/allEntries')
       })
       .catch(error => console.error(error))
 
-
-    return res.json(updatedEntry)
-
   })
+
+  //testing for edit --sushma
+server.get('/allEntries/:id', isLoggedIn, async(req, res)=>{
+  let entry = await db.collection('entries').find({_id : ObjectId(req.params.id)}).toArray();
+  res.render('edit.ejs', {entry: entry})
+
+})
+
 
   server.delete('/allEntries', (req,res) => {
     const id = req.body.entryId;
-    console.log(typeof id);
+
     db.collection('entries').findOneAndDelete({_id : ObjectId(id)}, (err, result) => {
       if (err) return res.send(500, err)
-      console.log(result)
+
       res.send('Message deleted!')
     })
   })
