@@ -70,7 +70,7 @@ server.post('/entry', uploadS3.single('image'), (req, res) => {
     res.redirect('/allEntries')
   })
 
-  server.post('/allEntries', async (req, res) => {
+  server.post('/allEntries', (req, res) => {
 
     const { entryId, title, note, tag } = req.body
     
@@ -81,7 +81,7 @@ server.post('/entry', uploadS3.single('image'), (req, res) => {
     }
 
 
-    const updatedEntry = await db.collection('entries').findOneAndUpdate(
+  db.collection('entries').findOneAndUpdate(
       { _id: ObjectId(entryId) },
       { $set: editedEntry }
     )
@@ -89,9 +89,6 @@ server.post('/entry', uploadS3.single('image'), (req, res) => {
         res.redirect('/allEntries')
       })
       .catch(error => console.error(error))
-
-
-   
 
   })
 
