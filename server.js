@@ -2,6 +2,9 @@ const express = require("express");
 const server = express()
 var mongoose = require('mongoose');
 const ejsMate = require('ejs-mate'); //for layout boilerplate
+
+const MethodOverride = require("method-override")
+
 const multer = require('multer')
 // S3 packages
 const aws = require('aws-sdk')
@@ -10,12 +13,14 @@ const configAWS = require('./config/aws.js')
 const s3 = new aws.S3(configAWS)
 require('dotenv').config({path: "./config/.env"})
 
+
 server.use(express.json());        // to parse json data  
 server.use(express.urlencoded({ extended: true })) // use express.urlencoded to parse incoming requests with payloads
 
 server.engine('ejs', ejsMate) //use ejs server.engine
 server.set("view engine", "ejs")    // allows us to use the ejs files in the view folder
 server.use(express.static("public"));//to access our public folder
+server.unsubscribe(MethodOverride('_method')); //method override 
 
 server.listen(process.env.PORT || 3000, () => {
     console.log("Listening on port 3000");
@@ -39,6 +44,8 @@ mongoose.connect(configDB.url, (err, database) => {
 
 // pass passport for configuration
 require('./config/passport')(passport);
+
+
 
 
 // required for passport

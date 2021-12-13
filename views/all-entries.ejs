@@ -1,3 +1,8 @@
+
+<% layout('/layout/boilerplate') %>
+
+      <h1 class = "text-center mb-3">Your Entries</h1>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -31,7 +36,7 @@
       </select>
       <button class="filter-button">Filter</button>
       </div>
-    </div>
+
 
     <div class="card-container d-flex flex-wrap justify-content-center">
       <% for(let entry of entries) { %>
@@ -47,10 +52,12 @@
               class="btn btn-warning editButton"
               entry-id="<%= entry._id %>"
               user-id="<%= entry.userId %>"
-              id="<%= entry._id %>"
-            >
-              Edit
+              id="<%= entry._id %> "
+              >
+              <a href="/allEntries/<%= entry._id %>">Edit</a>
+                            
             </button>
+
             <button
               class="btn btn-danger deleteButton"
               entry-id="<%= entry._id %>"
@@ -64,5 +71,4 @@
       <% } %>
     </div>
     <script src="main.js"></script>
-  </body>
-</html>
+

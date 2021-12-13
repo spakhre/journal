@@ -1,0 +1,12 @@
+.navbar-light {
+    background:lightsteelblue;
+    height:120px;
+    box-shadow:0px 2px 5px lightskyblue;
+    font-weight: bold;
+}
+
+
+.navbar-brand {
+    text-transform:uppercase;
+    color:red;
+}

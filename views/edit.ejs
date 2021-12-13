@@ -1,0 +1,37 @@
+<% layout('/layout/boilerplate') %>
+
+<div class="container">
+    <div class="row">
+        <h1 class ="text-center">Edit Journal</h1>
+
+        <form class ="edit-form" action="/allEntries" method="POST">
+            <div class="form-group mb-3">
+                <select placeholder="<%= entry[0].tag %>" name="tag" class="form-select form-control-color" required >
+                    <option value="" disabled selected hidden>How was your day today?</option>
+                    <option value="Amazing">Amazing</option>
+                    <option value="exciting">exciting</option>
+                    <option value="plain">plain</option>
+                    <option value="not-The-Best-Day">not The Best Day</option>
+                    <option value="horrible">horrible</option>
+                </select>
+            </div>
+
+            <input name= "entryId" type="hidden" value="<%= entry[0]._id %>">
+
+            <div id = "<%=entry._id %>" class=" form-group mb-3">
+                <label for="title" class="form-label">Entry Title</label>
+            <input type="text" name="title" id="title" class="form-control update-title" placeholder="Entry Title" value="<%= entry[0].title %>"> 
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="Entry note" class="form-label">Entry note</label>
+            <textarea type="text" class="form-control update-note" name="note" placeholder="Let's start logging......." rows="10"><%= entry[0].note %></textarea>
+        </div>
+    
+            <div class="form-group">
+            <button class="btn btn-primary update-entry" entry-id ="<%= entry[0]._id %>" type ="submit" id="button" >Update Entry</button>
+            </div>
+        </form>
+    </div>
+</div>
+
