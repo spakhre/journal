@@ -14,10 +14,25 @@
     <title>All Entries</title>
   </head>
   <body>
+    <% const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] %>
+    <% let year = new Date().getFullYear() %>
     <div>
       <h1>Your Entries</h1>
+      <div>
+      <select class="select-month">
+        <% for (let i = 1; i < months.length; i++) { %>
+          <option value= <%= i %> ><%= months[i]%></option>
+        <% } %>
+      </select>
+      <select class="select-year">
+        <% for (let i = 2020; i < year + 1; i++) { %>
+          <option value= <%= i %> ><%= i%></option>
+        <% } %>
+      </select>
+      <button class="filter-button">Filter</button>
+      </div>
     </div>
-    <% const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] %>
+
     <div class="card-container d-flex flex-wrap justify-content-center">
       <% for(let entry of entries) { %>
       <div class="card" style="width: 18rem">
