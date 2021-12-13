@@ -2,7 +2,8 @@ const journal = require('./journal')
 const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const { ObjectId } = require("mongodb")
 
-module.exports = function (server, passport, db) {
+
+module.exports = function (server, passport, db, multer, multerS3, s3, aws) {
 
   server.get('/', (req, res) => {
     res.render('index.ejs')
@@ -20,8 +21,38 @@ module.exports = function (server, passport, db) {
 
   })
 
-  server.post('/entry', (req, res) => {
+  server.post('/filteredEntries', isLoggedIn, async (req,res) => {
+    console.log(req.body)
+    let entries = await db.collection('entries').find({month: Number(req.body.month), year: Number(req.body.year)}).toArray();
 
+    console.log(entries)
+    res.render('all-entries.ejs', {entries: entries})
+
+  })
+
+  //Multer s3 handling image upload
+  aws.config.region = 'us-east-2';
+  var uploadS3 = multer({
+    storage: multerS3({
+      s3: s3,
+      bucket: 'day-book',
+      acl: 'public-read',
+      metadata: function(req, file, cb) {
+        cb(null, {
+          fieldName: file.fieldname
+        });
+      },
+      key: function(req, file, cb) {
+        cb(null, Date.now().toString() + '.png')
+      }
+    })
+  })
+
+// var cpUpload = uploadS3.fields([{name: 'image', maxCount: 1}])
+// uploadS3.single('image')
+server.post('/entry', uploadS3.single('image'), (req, res) => {
+  console.log(req.file);
+  const image = !req.file ? "img/laptopCoffee.jpeg" : req.file.location
     const date = new Date()
     // const month = months[date.getMonth() + 1]
     const entry = {
@@ -32,6 +63,7 @@ module.exports = function (server, passport, db) {
       year: date.getFullYear(),
       title: req.body.title,
       note: req.body.paragraph,
+      image: image,
       tag: req.body.tag
     }
     db.collection('entries').insertOne(entry)

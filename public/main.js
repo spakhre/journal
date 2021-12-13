@@ -65,3 +65,37 @@ Array.from(deleteButton).forEach( function(element){
         })
     })
     })
+
+// FILTER BUTTON
+
+let filterButton = document.querySelector('.filter-button')
+
+filterButton.addEventListener('click', filterByDate)
+
+async function filterByDate(e) {
+    let month = document.querySelector('.select-month').value
+
+    let year = document.querySelector('.select-year').value
+
+    console.log(month)
+    console.log(year)
+
+    let dateInfo = {
+        month, 
+        year
+    }
+   
+
+   const response = await fetch("/filteredEntries", {
+        method: "POST",
+        body: JSON.stringify(dateInfo),
+        headers: {
+            "Content-Type" : "application/json"
+        }
+    })
+
+    let page = await response.text()
+    document.writeln(page)
+
+
+}
