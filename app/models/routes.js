@@ -1,4 +1,5 @@
 const journal = require('./journal')
+const {getUnsplashPhoto } = require("./services");
 const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const { ObjectId } = require("mongodb")
 
@@ -50,9 +51,9 @@ module.exports = function (server, passport, db, multer, multerS3, s3, aws) {
 
 // var cpUpload = uploadS3.fields([{name: 'image', maxCount: 1}])
 // uploadS3.single('image')
-server.post('/entry', uploadS3.single('image'), (req, res) => {
-  console.log(req.file);
-  const image = !req.file ? "img/laptopCoffee.jpeg" : req.file.location
+server.post('/entry', uploadS3.single('image'), async (req, res) => {
+  const tag = req.body.tag
+  const image = !req.file ? await getUnsplashPhoto(tag) : req.file.location
     const date = new Date()
     // const month = months[date.getMonth() + 1]
     const entry = {
@@ -64,13 +65,13 @@ server.post('/entry', uploadS3.single('image'), (req, res) => {
       title: req.body.title,
       note: req.body.paragraph,
       image: image,
-      tag: req.body.tag
+      tag: tag
     }
     db.collection('entries').insertOne(entry)
     res.redirect('/allEntries')
   })
 
-  server.post('/allEntries', async (req, res) => {
+  server.post('/allEntries', (req, res) => {
 
     const { entryId, title, note, tag } = req.body
     
@@ -81,7 +82,7 @@ server.post('/entry', uploadS3.single('image'), (req, res) => {
     }
 
 
-    const updatedEntry = await db.collection('entries').findOneAndUpdate(
+  db.collection('entries').findOneAndUpdate(
       { _id: ObjectId(entryId) },
       { $set: editedEntry }
     )
@@ -89,9 +90,6 @@ server.post('/entry', uploadS3.single('image'), (req, res) => {
         res.redirect('/allEntries')
       })
       .catch(error => console.error(error))
-
-
-   
 
   })
 

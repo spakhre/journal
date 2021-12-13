@@ -2,6 +2,7 @@ const express = require("express");
 const server = express()
 var mongoose = require('mongoose');
 const ejsMate = require('ejs-mate'); //for layout boilerplate
+const cors = require('cors');
 
 const MethodOverride = require("method-override")
 
@@ -13,7 +14,7 @@ const configAWS = require('./config/aws.js')
 const s3 = new aws.S3(configAWS)
 require('dotenv').config({path: "./config/.env"})
 
-
+server.use(cors())
 server.use(express.json());        // to parse json data  
 server.use(express.urlencoded({ extended: true })) // use express.urlencoded to parse incoming requests with payloads
 

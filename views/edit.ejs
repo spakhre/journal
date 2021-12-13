@@ -18,9 +18,9 @@
 
             <input name= "entryId" type="hidden" value="<%= entry[0]._id %>">
 
-            <div id = "<%=entry._id %>" class=" form-group mb-3">
+            <div class=" form-group mb-3">
                 <label for="title" class="form-label">Entry Title</label>
-            <input type="text" name="title" id="title" class="form-control update-title" placeholder="Entry Title" value="<%= entry[0].title %>"> 
+            <input type="text" name="title" id="title" class="form-control update-title" placeholder="Entry Title" value=<%= entry[0].title %>> 
             </div>
 
             <div class="form-group mb-3">
