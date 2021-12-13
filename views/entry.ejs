@@ -1,19 +1,11 @@
 <% layout('/layout/boilerplate') %>
 
-                <li>Show any recent entries</li>
-                <li style="display: inline;"> 
-                    <label for="start">Calendar Picker:</label>
-                    <input type="date" id="start" name="trip-start"
-                           value="2018-07-22"
-                           min="2018-01-01" max="2018-12-31">
-                </li>
-
 <div class="container">
     <div class="row">
         <h1 class ="text-center">Entry Page</h1>
         
 
-        <form action="/entry" method="post">
+        <form action="/entry" method="post" enctype="multipart/form-data">
             <div class="form-group mb-3">
                 <select name="tag" class="form-select form-control-color" aria-label="Default select example" required>
                     <option selected>How was your day today?</option>

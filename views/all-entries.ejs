@@ -37,6 +37,19 @@
       <button class="filter-button">Filter</button>
       </div>
 
+      <div>
+<form action="/allEntries" method="GET">
+  <select name="tag" aria-label="Default select example" required>
+    <option>All</option>
+    <option value="Amazing">Amazing</option>
+    <option value="exciting">exciting</option>
+    <option value="plain">plain</option>
+    <option value="not-The-Best-Day">not The Best Day</option>
+    <option value="horrible">horrible</option>
+  </select>
+  <button type="submit">Filter by Tag</button>
+</form>
+      </div>
 
     <div class="card-container d-flex flex-wrap justify-content-center">
       <% for(let entry of entries) { %>
