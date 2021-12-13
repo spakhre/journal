@@ -1,21 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-    <title>All Entries</title>
-  </head>
-  <body>
-    <div>
-      <h1>Your Entries</h1>
+<% layout('/layout/boilerplate') %>
+
+      <h1 class = "text-center mb-3">Your Entries</h1>
     </div>
     <% const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] %>
     <div class="card-container d-flex flex-wrap justify-content-center">
@@ -32,10 +17,12 @@
               class="btn btn-warning editButton"
               entry-id="<%= entry._id %>"
               user-id="<%= entry.userId %>"
-              id="<%= entry._id %>"
-            >
-              Edit
+              id="<%= entry._id %> "
+              >
+              <a href="/allEntries/<%= entry._id %>">Edit</a>
+                            
             </button>
+
             <button
               class="btn btn-danger deleteButton"
               entry-id="<%= entry._id %>"
@@ -49,5 +36,4 @@
       <% } %>
     </div>
     <script src="main.js"></script>
-  </body>
-</html>
+
