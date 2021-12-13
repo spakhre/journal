@@ -17,9 +17,14 @@ module.exports = function (server, passport, db, multer, multerS3, s3, aws) {
 
   server.get('/allEntries', isLoggedIn, async (req,res) => {
 
-    let entries = await db.collection('entries').find({userId : ObjectId(req.user._id)}).toArray();
-    res.render('all-entries.ejs', {entries: entries})
-
+    let tag = req.query.tag
+    if(tag === undefined || tag == 'All'){
+      let entries = await db.collection('entries').find({userId : ObjectId(req.user._id)}).toArray();
+      res.render('all-entries.ejs', {entries: entries})
+    } else {    // handles filter by tag
+      let entries = await db.collection('entries').find({userId : ObjectId(req.user._id), tag: tag}).toArray();
+      res.render('all-entries.ejs', {entries: entries})
+    }
   })
 
   server.post('/filteredEntries', isLoggedIn, async (req,res) => {
@@ -144,8 +149,13 @@ server.get('/allEntries/:id', isLoggedIn, async(req, res)=>{
 
   }))
 
-}
+  // logout
+server.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
+});
 
+}
 
 // route middleware to ensure user is logged in
 function isLoggedIn(req, res, next) {
