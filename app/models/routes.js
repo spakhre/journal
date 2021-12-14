@@ -19,7 +19,7 @@ module.exports = function (server, passport, db, multer, multerS3, s3, aws) {
 
     let tag = req.query.tag
     if(tag === undefined || tag == 'All'){
-      let entries = await db.collection('entries').find({userId : ObjectId(req.user._id)}).toArray();
+      let entries = await db.collection('entries').find({userId : ObjectId(req.user._id)}).sort({"dateCreated": -1}).toArray();
       res.render('all-entries.ejs', {entries: entries})
     } else {    // handles filter by tag
       let entries = await db.collection('entries').find({userId : ObjectId(req.user._id), tag: tag}).toArray();
@@ -37,10 +37,10 @@ module.exports = function (server, passport, db, multer, multerS3, s3, aws) {
   })
    
   server.post('/filteredEntries', isLoggedIn, async (req,res) => {
-    console.log(req.body)
+    
     let entries = await db.collection('entries').find({month: Number(req.body.month), year: Number(req.body.year)}).toArray();
 
-    console.log(entries)
+   
     res.render('all-entries.ejs', {entries: entries})
 
   })
@@ -66,6 +66,7 @@ module.exports = function (server, passport, db, multer, multerS3, s3, aws) {
 // var cpUpload = uploadS3.fields([{name: 'image', maxCount: 1}])
 // uploadS3.single('image')
 server.post('/entry', uploadS3.single('image'), async (req, res) => {
+ 
   const tag = req.body.tag
   const image = !req.file ? await getUnsplashPhoto(tag) : req.file.location
     const date = new Date()

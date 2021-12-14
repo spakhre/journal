@@ -2,13 +2,13 @@
 <% layout('/layout/boilerplate') %>
 
       <h1 class = "text-center mb-3">Your Entries</h1>
+      <div>
 
     <% const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] %>
     <% let year = new Date().getFullYear() %>
-    <div>
-      <h1>Your Entries</h1>
-      <div>
-      <select class="select-month">
+
+      <div class=" text-center container mb-4">
+      <select class="select-month ">
         <% for (let i = 1; i < months.length; i++) { %>
           <option value= <%= i %> ><%= months[i]%></option>
         <% } %>
@@ -20,6 +20,7 @@
       </select>
       <button class="filter-button">Filter</button>
       </div>
+    </div>
 
       <div>
 <form action="/allEntries" method="GET">
@@ -35,40 +36,41 @@
 </form>
       </div>
 
-    <div class="card-container d-flex flex-wrap justify-content-center">
+ 
       <% for(let entry of entries) { %>
-      <div class="card" style="width: 18rem">
-        <img src=<%= entry.image %> class="card-img-top" alt="..." />
-        <div class="card-body">
-          <h2 class="entry-date"><%= months[entry.month] %> <%= entry.day %> <%= entry.year %></h2>
-          <h5 class="card-title"><%= entry.title %></h5>
-          <p class="card-text note">
-            <%= entry.note.substring(0, 100) + "..." %>
-          <a href="/entry/<%= entry._id %>">Read More</a>
-          </p>
-          <p class="card-text tag"><%= entry.tag %></p>
-          <div>
-            <button
-              class="btn btn-warning editButton"
-              entry-id="<%= entry._id %>"
-              user-id="<%= entry.userId %>"
-              id="<%= entry._id %> "
-              >
-              <a href="/allEntries/<%= entry._id %>">Edit</a>
-                            
-            </button>
-
-            <button
+      <div class="card mb-3 shadow" style="width: 1400px;" >
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img src=<%= entry.image %> style=" height: 400px; width: 650px"class="img-fluid rounded-start" alt="..." />
+            </div>
+            <div class="col-md-8">
+              <div class="card-body mb-4">
+                <h2 class="entry-date"><%= months[entry.month] %> <%= entry.day %> <%= entry.year %></h2>
+                <h5 class="card-title"><%= entry.title %></h5>
+                <p class="card-text note">
+                  <%= entry.note.substring(0, 100) + "..." %>
+                  <a href="/entry/<%= entry._id %>">Read More</a>
+                </p>
+                <p class="card-text tag"><%= entry.tag %></p>
+                <button
+                class="btn btn-warning editButton"
+                entry-id="<%= entry._id %>"
+                user-id="<%= entry.userId %>"
+                id="<%= entry._id %> "
+                >
+                <a href="/allEntries/<%= entry._id %>">Edit</a>                              
+              </button>
+              <button
               class="btn btn-danger deleteButton"
               entry-id="<%= entry._id %>"
               user-id="<%= entry.userId %>"
             >
               Delete
             </button>
-          </div>
+                </div>
+              </div>
+            </div>
         </div>
-      </div>
-      <% } %>
-    </div>
+        <% } %>
     <script src="main.js"></script>
 
