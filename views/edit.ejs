@@ -6,14 +6,14 @@
 
         <form class ="edit-form" action="/allEntries" method="POST">
             <div class="form-group mb-3">
-                <select placeholder="<%= entry[0].tag %>" name="tag" class="form-select form-control-color" required >
+                <!-- <select placeholder="<%= entry[0].tag %>" name="tag" class="form-select form-control-color" required >
                     <option value="" disabled selected hidden>How was your day today?</option>
                     <option value="Amazing">Amazing</option>
                     <option value="exciting">exciting</option>
                     <option value="plain">plain</option>
                     <option value="not-The-Best-Day">not The Best Day</option>
                     <option value="horrible">horrible</option>
-                </select>
+                </select> -->
             </div>
 
             <input name= "entryId" type="hidden" value="<%= entry[0]._id %>">
