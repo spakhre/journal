@@ -11,3 +11,14 @@
     color:red;
 }
 
+#container{
+    border: 1px solid #AEDEDD;
+    box-shadow: 1.5px 2px 7px 4px #aededd;    
+    padding-bottom: 5rem;
+}
+
+.body{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}

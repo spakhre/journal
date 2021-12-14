@@ -27,6 +27,15 @@ module.exports = function (server, passport, db, multer, multerS3, s3, aws) {
     }
   })
 
+  server.get('/entry/:id', isLoggedIn, async (req, res) => {
+    console.log(req.params.id);
+    if(req.params.id.length === 24){
+      let entry = await db.collection('entries').findOne({_id: ObjectId(req.params.id)})
+      console.log(entry);
+      res.render('fullEntry.ejs', {entry: entry})
+    }    
+  })
+   
   server.post('/filteredEntries', isLoggedIn, async (req,res) => {
     
     let entries = await db.collection('entries').find({month: Number(req.body.month), year: Number(req.body.year)}).toArray();
