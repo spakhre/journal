@@ -3,22 +3,6 @@
 
       <h1 class = "text-center mb-3">Your Entries</h1>
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-    <title>All Entries</title>
-  </head>
-  <body>
     <% const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] %>
     <% let year = new Date().getFullYear() %>
     <div>
@@ -58,7 +42,10 @@
         <div class="card-body">
           <h2 class="entry-date"><%= months[entry.month] %> <%= entry.day %> <%= entry.year %></h2>
           <h5 class="card-title"><%= entry.title %></h5>
-          <p class="card-text note"><%= entry.note %></p>
+          <p class="card-text note">
+            <%= entry.note.substring(0, 100) + "..." %>
+          <a href="/entry/<%= entry._id %>">Read More</a>
+          </p>
           <p class="card-text tag"><%= entry.tag %></p>
           <div>
             <button
