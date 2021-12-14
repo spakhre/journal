@@ -19,7 +19,7 @@ module.exports = function (server, passport, db, multer, multerS3, s3, aws) {
 
     let tag = req.query.tag
     if(tag === undefined || tag == 'All'){
-      let entries = await db.collection('entries').find({userId : ObjectId(req.user._id)}).toArray();
+      let entries = await db.collection('entries').find({userId : ObjectId(req.user._id)}).sort({"dateCreated": -1}).toArray();
       res.render('all-entries.ejs', {entries: entries})
     } else {    // handles filter by tag
       let entries = await db.collection('entries').find({userId : ObjectId(req.user._id), tag: tag}).toArray();
