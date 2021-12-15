@@ -34,12 +34,12 @@ module.exports = function (server, passport, db, multer, multerS3, s3, aws) {
   })
    
   server.post('/filteredEntries', isLoggedIn, async (req,res) => {
+
     
     let entries = await db.collection('entries').find({userId: ObjectId(req.user._id), month: Number(req.body.month), year: Number(req.body.year)}).toArray();
 
-   
-    res.render('all-entries.ejs', {entries: entries})
 
+    res.render('all-entries.ejs', {entries: entries})
   })
 
   //Multer s3 handling image upload

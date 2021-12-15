@@ -50,10 +50,16 @@
               <div class="card-body mb-4">
                 <h2 class="entry-date"><%= months[entry.month] %> <%= entry.day %> <%= entry.year %></h2>
                 <h5 class="card-title"><%= entry.title %></h5>
+                <% if(entry.note.length > 300) { %>
                 <p class="card-text note">
-                  <%= entry.note.substring(0, 100) + "..." %>
+                  <%= entry.note.substring(0, 300) + "..." %>
                   <a href="/entry/<%= entry._id %>">Read More</a>
                 </p>
+              <% } else { %>
+                <p class="card-text note">
+                  <%= entry.note %>
+                </p>
+                <% } %>
                 <p class="card-text tag"><%= entry.tag %></p>
                 <button
                 class="btn btn-warning editButton"

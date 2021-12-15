@@ -22,3 +22,9 @@
     display: flex;
     align-items: center;
 }
+
+#displayImg{
+    margin: auto;
+    width: 35vw;
+    height: 30rem;
+}
