@@ -1,4 +1,3 @@
-const journal = require('./journal')
 const {getUnsplashPhoto } = require("./services");
 const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const { ObjectId } = require("mongodb")
@@ -19,7 +18,7 @@ module.exports = function (server, passport, db, multer, multerS3, s3, aws) {
 
     let tag = req.query.tag
     if(tag === undefined || tag == 'All'){
-      let entries = await db.collection('entries').find({userId : ObjectId(req.user._id)}).sort({"dateCreated": -1}).toArray();
+      let entries = await db.collection('entries').find({userId : ObjectId(req.user._id)}).sort({dateCreated: -1}).toArray();
       res.render('all-entries.ejs', {entries: entries})
     } else {    // handles filter by tag
       let entries = await db.collection('entries').find({userId : ObjectId(req.user._id), tag: tag}).toArray();
@@ -28,7 +27,6 @@ module.exports = function (server, passport, db, multer, multerS3, s3, aws) {
   })
 
   server.get('/entry/:id', isLoggedIn, async (req, res) => {
-    console.log(req.params.id);
     if(req.params.id.length === 24){
       let entry = await db.collection('entries').findOne({_id: ObjectId(req.params.id)})
       res.render('fullEntry.ejs', {entry: entry})
@@ -36,7 +34,11 @@ module.exports = function (server, passport, db, multer, multerS3, s3, aws) {
   })
    
   server.post('/filteredEntries', isLoggedIn, async (req,res) => {
-    let entries = await db.collection('entries').find({month: Number(req.body.month), year: Number(req.body.year)}).toArray();   
+
+    
+    let entries = await db.collection('entries').find({userId: ObjectId(req.user._id), month: Number(req.body.month), year: Number(req.body.year)}).toArray();
+
+
     res.render('all-entries.ejs', {entries: entries})
   })
 
