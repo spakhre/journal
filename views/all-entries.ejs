@@ -2,12 +2,14 @@
 <% layout('/layout/boilerplate') %>
 
       <h1 class = "text-center mb-3">Your Entries</h1>
-      <div>
+      <div class = "row justify-content-center">
+      <div class="col-4">
 
-    <% const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] %>
-    <% let year = new Date().getFullYear() %>
 
+        <% const months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] %>
+        <% let year = new Date().getFullYear() %>
       <div class=" text-center container mb-4">
+
       <select class="select-month ">
         <% for (let i = 1; i < months.length; i++) { %>
           <option value= <%= i %> ><%= months[i]%></option>
@@ -18,13 +20,13 @@
           <option value= <%= i %> ><%= i%></option>
         <% } %>
       </select>
-      <button class="filter-button">Filter</button>
+      <button class="filter-button">Filter By Date</button>
       </div>
     </div>
 
-      <div>
+      <div class ="text-center col-4">
 <form action="/allEntries" method="GET">
-  <select name="tag" aria-label="Default select example" required>
+  <select name="tag" aria-label="Default select example" class ="mb-4"required>
     <option>All</option>
     <option value="Amazing">Amazing</option>
     <option value="exciting">exciting</option>
@@ -35,6 +37,7 @@
   <button type="submit">Filter by Tag</button>
 </form>
       </div>
+    </div>
 
  
       <% for(let entry of entries) { %>
